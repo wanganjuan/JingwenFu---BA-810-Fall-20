@@ -1,12 +1,46 @@
 var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
+const Bcrypt = require('bcryptjs');
 
-var statuses = ['Todo','In Process','Completed'];
+var userSchema = new Schema({
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    active: { type: Boolean, default: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
 
-var GadgetSchema = new Schema({
-    Yoo: { type: String },
-    Hoo: { type: Number }
+    registerDate: { type: Date, default: Date.now }
+
+
 });
 
-module.exports = 
- Mongoose.model('Gadgets', GadgetSchema);
+userSchema.pre('save', function (next) {
+    var person = this;
+    if (this.isModified('password') || this.isNew) {
+        Bcrypt.genSalt(10, function (err, salt) {
+            if (err) {
+                return next(err);
+            }
+            Bcrypt.hash(person.password, salt, function (err, hash) {
+                if (err) {
+                    return next(err);
+                }
+                person.password = hash;
+                next();
+            });
+        });
+    } else {
+        return next();
+    }
+});
+
+userSchema.methods.comparePassword = function (passw, cb) {
+    Bcrypt.compare(passw, this.password, function (err, isMatch) {
+        if (err) {
+            return cb(err);
+        }
+        cb(null, isMatch);
+    });
+};
+
+module.exports = Mongoose.model('User', userSchema);

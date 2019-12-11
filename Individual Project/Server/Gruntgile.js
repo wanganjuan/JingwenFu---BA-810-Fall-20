@@ -1,46 +1,41 @@
 module.exports = function (grunt) {
-
-    // Project configuration.
+    // Project & task configuration.
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
-
-        nodemon: {
-            dev: { script: 'index.js' }
+  
+      //Is this the right place to add this??
+      nodemon: {
+        dev: { script: 'index.js' }
+      },
+      //Is this the right place to add this??
+      jshint: {
+        options: {
+          reporter: require('jshint-stylish'),
+          esversion: 6
         },
-
-        env: {
-            dev: {
-                NODE_ENV: 'development'
-            },
-            production: {
-                NODE_ENV: 'production'
-            }
+        all: ['Gruntfile.js', 'config/*.js']
+      },
+      //creates task to set env variables, dev and prod
+      pkg: grunt.file.readJSON('package.json'),
+      env: {
+        dev: {
+          NODE_ENV: 'development'
         },
-
-        jshint: {
-            options: {
-                reporter: require('jshint-stylish'),
-                esversion: 6
-            },
-            all: ['Grunfile.js', 'config/*.js']
+        production: {
+          NODE_ENV: 'production'
         }
-
+      }
     });
-
-    grunt.loadNpmTasks('grunt-env');
-    grunt.loadNpmTasks('grunt-contrib-nodemon');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-
+    grunt.loadNpmTasks('grunt-contrib-nodemon');
+    grunt.loadNpmTasks('grunt-env');
+  
     grunt.registerTask('default', [
-        'env:dev',
-        'jshint',
-        'nodemon'
+      'env:dev',
+      'jshint',
+      'nodemon'
     ]);
-
     grunt.registerTask('production', [
-        'env:production',
-        'jshint',
-        'nodemon'
+      'env:production',
+      'nodemon'
     ]);
-
-};  
+  };

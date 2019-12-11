@@ -1,25 +1,18 @@
 var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
-mongoose = require('Gadgets'),
-Gadgets = mongoose.module('Gadgets');
+var TodosSchema = new Schema({
+    userid: { type: Schema.Types.ObjectId, required: true },
+    todo: { type: String, required: true },
+    detail: { type: String },
+    dateCreated: { type: Date, default: Date.now },
+    dateDue: { type: Date, default: Date.now },
+    status: { type: String, Enum: ['Todo', 'In Process', 'Completed'], default: 'Todo' },
 
+    file: {
+        name: { type: String },
+        originalname: { type: String }
+    }
+});
 
-  var TodoSchema = new Schema({
-      user:{type:Schema.Types.ObjectId, required:true },
-      todo:{type:String, required:true },
-
-
-  });
-
-  module.export = 
-  Gadgets.model('Todo', TodoSchema);
-
-
-
-
-var Mongoose = require('mongoose');
-var Schema = Mongoose.Schema;
-
-mongoose = require('Gadgets'),
-Gadgets = mongoose.module('Gadgets');
+module.exports = Mongoose.model('todos', TodosSchema);

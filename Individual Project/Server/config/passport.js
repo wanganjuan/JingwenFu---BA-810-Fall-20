@@ -5,7 +5,6 @@ const passport = require('passport'),
     jwtStrategy = require('passport-jwt').Strategy,
     extractJwt = require('passport-jwt').ExtractJwt,
     localStrategy = require('passport-local');
-
 var localOptions = { usernameField: 'email' };
 
 var localLogin = new localStrategy(localOptions, function (email, password, next) {
@@ -27,6 +26,7 @@ var localLogin = new localStrategy(localOptions, function (email, password, next
         })
         .catch(function (err) { return next(err); });
 });
+
 generateToken = function (user) {
     return jwt.sign(user, config.secret, {
         expiresIn: 10000
@@ -66,6 +66,5 @@ var jwtLogin = new jwtStrategy(jwtOptions, function (payload, next) {
 });
 
 passport.use(jwtLogin);
-
 
 passport.use(localLogin);
