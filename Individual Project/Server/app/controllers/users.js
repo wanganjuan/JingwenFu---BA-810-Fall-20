@@ -51,6 +51,7 @@ module.exports = function (app, config) {
         logger.log('info', '%s logging in', req.body.email);
         var email = req.body.email
         var password = req.body.password;
+
         var obj = { 'email': email, 'password': password };
         res.status(201).json(obj);
     });
